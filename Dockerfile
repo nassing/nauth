@@ -1,15 +1,16 @@
-FROM openjdk:17-oracle
+FROM openjdk:17-alpine as build
 
 WORKDIR /app
 
 COPY build.gradle settings.gradle gradlew /app/
-COPY src app/src/
+COPY src /app/src/
+COPY gradle /app/gradle/
 
 RUN chmod +x ./gradlew
-RUN ./gradlew build
+RUN ./gradlew clean build
 
-COPY --from=build /app/build/libs/nauth-1.0-SNAPSHOT.jar /app/app.jar
+COPY /build/libs/nauth-1.0-SNAPSHOT.jar /app/app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
