@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine as build
+FROM amazoncorretto:17-alpine-jdk as build
 
 WORKDIR /app
 
