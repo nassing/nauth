@@ -9,21 +9,23 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
 public class RedisConfiguration {
-    @Value("${spring.data.redis.host}")
-    private String REDIS_HOST;
-    @Value("${spring.data.redis.port}")
-    private Integer REDIS_PORT;
+    // @Value("${spring.data.redis.host}")
+    // private String REDIS_HOST;
+    // @Value("${spring.data.redis.port}")
+    // private Integer REDIS_PORT;
 
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(REDIS_HOST, REDIS_PORT);
-        return new JedisConnectionFactory(config);
+    JedisConnectionFactory jedisConnectionFactory() {
+        JedisConnectionFactory jedisConFactory
+        = new JedisConnectionFactory();
+        jedisConFactory.setHostName("localhost");
+        jedisConFactory.setPort(7071);
+        return jedisConFactory;
     }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setEnableTransactionSupport(true);
         template.setConnectionFactory(jedisConnectionFactory());
         return template;
     }
