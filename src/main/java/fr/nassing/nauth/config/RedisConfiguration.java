@@ -9,17 +9,17 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
 public class RedisConfiguration {
-    // @Value("${spring.data.redis.host}")
-    // private String REDIS_HOST;
-    // @Value("${spring.data.redis.port}")
-    // private Integer REDIS_PORT;
+    @Value("${spring.data.redis.host}")
+    private String REDIS_HOST;
+    @Value("${spring.data.redis.port}")
+    private Integer REDIS_PORT;
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
         JedisConnectionFactory jedisConFactory
         = new JedisConnectionFactory();
-        jedisConFactory.setHostName("localhost");
-        jedisConFactory.setPort(7071);
+        jedisConFactory.setHostName(REDIS_HOST);
+        jedisConFactory.setPort(REDIS_PORT);
         return jedisConFactory;
     }
 

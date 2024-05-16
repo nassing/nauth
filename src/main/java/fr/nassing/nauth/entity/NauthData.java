@@ -6,16 +6,13 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
-@RedisHash("USER")
-public class NauthUser implements Serializable {
+@RedisHash("NAUTHDATA")
+public class NauthData implements Serializable {
     @Id
     private UUID id;
-    private String email;
-
-    private List<NauthData> nauthData;
+    private String data;
 }

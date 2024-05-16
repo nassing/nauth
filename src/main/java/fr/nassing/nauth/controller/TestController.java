@@ -1,11 +1,10 @@
 package fr.nassing.nauth.controller;
 
+import fr.nassing.nauth.service.TestService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import fr.nassing.nauth.service.TestService;
 
 @RestController
 @RequestMapping("/test")

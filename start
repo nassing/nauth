@@ -1,3 +1,11 @@
 #!/bin/bash
 
-docker-compose up -d --build
+if ! docker ps --filter "name=redis" --filter "status=running" | grep -q redis; then
+  if docker ps -a --filter "name=redis" | grep -q redis; then
+    docker start redis
+  else
+    docker run -d --name redis -p 6379:6379 redis:latest
+  fi
+fi
+
+./gradlew bootRun
