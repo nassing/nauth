@@ -1,32 +1,41 @@
 package fr.nassing.nauth.service;
 
-import fr.nassing.nauth.entity.NauthData;
+
 import fr.nassing.nauth.entity.NauthUser;
-import fr.nassing.nauth.repository.NauthDataRepository;
+import fr.nassing.nauth.entity.NauthUser.NauthData;
 import fr.nassing.nauth.repository.NauthUserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class TestService {
     private final NauthUserRepository nauthUserRepository;
-    private final NauthDataRepository nauthDataRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public String test() {
-        UUID randomUUID = UUID.randomUUID();
-        UUID randomUUID2 = UUID.randomUUID();
+//        NauthUser nauthUser = NauthUser.builder().email("test email").build();
+//        testUser.addNauthData(NauthData.builder().data("test data").build());
+        HashMap<UUID, NauthData> nauthData = new HashMap<>();
+        nauthData.put(UUID.randomUUID(), new NauthData(UUID.randomUUID(), "test data"));
+        NauthUser nauthUser = new NauthUser(UUID.randomUUID(), "test email", nauthData);
 
-        NauthData nauthData = new NauthData(randomUUID2, "myData");
+        save(nauthUser);
 
-        NauthUser testUser = new NauthUser(randomUUID, "test", List.of(nauthData));
-        nauthUserRepository.save(testUser);
+        return "inserted value in Redis: " + getNauthUser(nauthUser.getId().toString());
+    }
 
+    public void save(NauthUser nauthUser) {
+        nauthUserRepository.save(nauthUser);
 
-        return "inserted value in Redis: " + getNauthUser(randomUUID.toString());
+//        for (Map.Entry<UUID, JsonObject> item : nauthUser.getData().entrySet()) {
+//            String key = "USER:" + nauthUser.getId().toString();
+//            redisTemplate.opsForHash().put(key, "DATA:" + item.getKey().toString(), item.getValue());
+//        }
     }
 
     public String saveNauthUser(NauthUser nauthUser) {
@@ -35,6 +44,6 @@ public class TestService {
     }
 
     public NauthUser getNauthUser(String id) {
-        return (NauthUser) nauthUserRepository.findById(id.toString()).orElse(null);
+        return nauthUserRepository.findById(id).orElse(null);
     }
 }

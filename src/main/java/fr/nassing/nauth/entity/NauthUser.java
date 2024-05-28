@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Data
@@ -17,5 +17,23 @@ public class NauthUser implements Serializable {
     private UUID id;
     private String email;
 
-    private List<NauthData> nauthData;
+//    @Transient
+//    private HashMap<UUID, JsonObject> data;
+
+//    @Builder
+//    public NauthUser(String email) {
+//        this.id = UUID.randomUUID();
+//        this.data = new HashMap<>();
+//
+//        this.email = email;
+//    }
+    @Data
+    @AllArgsConstructor
+    public static class NauthData {
+        private UUID id;
+        private String data;
+    }
+
+    private HashMap<UUID, NauthData> nauthData;
+
 }
