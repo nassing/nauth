@@ -1,6 +1,6 @@
 package fr.nassing.nauth.entity;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -10,30 +10,18 @@ import java.util.HashMap;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
+@Builder
 @RedisHash("USER")
 public class NauthUser implements Serializable {
     @Id
-    private UUID id;
+    private final UUID id;
     private String email;
+    private String username;
+    private String password;
 
-//    @Transient
-//    private HashMap<UUID, JsonObject> data;
+    private final HashMap<UUID, NauthData> nauthData = new HashMap<>();
 
-//    @Builder
-//    public NauthUser(String email) {
-//        this.id = UUID.randomUUID();
-//        this.data = new HashMap<>();
-//
-//        this.email = email;
-//    }
-    @Data
-    @AllArgsConstructor
-    public static class NauthData {
-        private UUID id;
-        private String data;
+    public void addNauthData(NauthData nauthData) {
+        this.nauthData.put(nauthData.getId(), nauthData);
     }
-
-    private HashMap<UUID, NauthData> nauthData;
-
 }
